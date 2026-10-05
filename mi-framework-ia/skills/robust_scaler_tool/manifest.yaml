@@ -1,0 +1,8 @@
+name: robust_scaler_tool
+version: 1.0.0
+description: Aplica RobustScaler a las metricas para mitigar el impacto de valores atipicos
+input_schema:
+  metrics: dict
+output_schema:
+  scaled_metrics: list
+permissions: []

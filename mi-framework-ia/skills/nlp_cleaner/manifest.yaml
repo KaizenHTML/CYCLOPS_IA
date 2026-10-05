@@ -1,0 +1,9 @@
+name: nlp_cleaner
+version: 1.0.0
+description: Limpia texto, anonimiza direcciones IP y extrae metricas cuantitativas
+input_schema:
+  text: string
+output_schema:
+  cleaned_text: string
+  raw_metrics: dict
+permissions: []

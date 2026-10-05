@@ -1,0 +1,15 @@
+name: phishing_detector_agent
+version: 1.0.0
+description: Agente principal de CYCLOPS para triaje y clasificacion de correos sospechosos
+skills_required:
+  - nlp_cleaner
+  - robust_scaler_tool
+permissions:
+  - db_read
+  - db_write
+input_schema:
+  raw_email_text: string
+output_schema:
+  classification: string
+  confidence_score: float
+  action_taken: string

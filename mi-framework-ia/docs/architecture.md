@@ -1,4 +1,4 @@
-# 🏗️ Arquitectura General del Sistema - CYCLOPS
+# Arquitectura General del Sistema - CYCLOPS
 
 Este documento describe la arquitectura técnica, la estructura de clases y el modelo de datos relacional para la plataforma **CYCLOPS**.
 
@@ -8,7 +8,6 @@ Este documento describe la arquitectura técnica, la estructura de clases y el m
 
 Ilustra la organización modular del sistema, detallando la separación entre la capa de presentación en React, la orquestación en FastAPI, el pipeline de Inteligencia Artificial y la persistencia en PostgreSQL.
 
-💡
 * **Diagrama de Componentes:** [Ver Diagrama en PDF](assets/component_diagram.pdf)
 
 ---
@@ -17,7 +16,6 @@ Ilustra la organización modular del sistema, detallando la separación entre la
 
 Define la estructura de objetos, servicios y tipos de datos que componen la lógica de negocio en el backend de Python.
 
-💡
 * **Diagrama de Clases:** [Ver Diagrama en PDF](assets/class_diagram.pdf)
 
 ---
@@ -26,5 +24,4 @@ Define la estructura de objetos, servicios y tipos de datos que componen la lóg
 
 Muestra el diseño conceptual de tablas, atributos y claves foráneas para garantizar la trazabilidad de incidentes, metadatos numéricos y acciones de mitigación.
 
-💡
 * **Diagrama Entidad Relacion:** [Ver Diagrama en PDF](assets/entity-relationship_diagram.pdf)

@@ -76,19 +76,19 @@ El proyecto cuenta con una serie de diagramas técnicos que documentan la estruc
 
 1. **Diagrama de Componentes**
    * **Propósito:** Muestra la organización modular del sistema, la separación entre la interfaz en React, la orquestación en FastAPI, el pipeline de Inteligencia Artificial y la base de datos PostgreSQL.
-   * **Ubicación:** [Ver Documento de Arquitectura] (docs/architecture.md)
+   * **Ubicación:** [Ver Documento de Arquitectura](docs/architecture.md)
 
 2. **Diagrama de Clases**
    * **Propósito:** Define la estructura de objetos, servicios y tipos de datos que componen la lógica de backend en Python, detallando los servicios de escalado, evaluación y gestión de incidentes.
-   * **Ubicación:** [Ver Documento de Arquitectura] (docs/architecture.md)
+   * **Ubicación:** [Ver Documento de Arquitectura](docs/architecture.md)
 
 3. **Diagrama Entidad-Relación**
    * **Propósito:** Ilustra el diseño relacional de las tablas en PostgreSQL, garantizando la trazabilidad entre usuarios, incidentes, metadatos extraídos, evaluaciones de la IA y acciones de mitigación.
-   * **Ubicación:** [Ver Documento de Arquitectura] (docs/architecture.md)
+   * **Ubicación:** [Ver Documento de Arquitectura](docs/architecture.md)
 
 4. **Diagrama de Historias de Usuario**
    * **Propósito:** Mapea el flujo condicional de interacción entre el Empleado, el Agente de Inteligencia Artificial y el Analista SOC, destacando el camino de automatización para alta confianza frente al triaje manual.
-   * **Ubicación:** [Ver Documento de Historias de Usuario] (docs/user_stories.md)
+   * **Ubicación:** [Ver Documento de Historias de Usuario](docs/user_stories.md)
 
 ---
 
@@ -96,10 +96,10 @@ El proyecto cuenta con una serie de diagramas técnicos que documentan la estruc
 
 Para consultar las explicaciones detalladas y los enlaces directos a cada recurso en PDF, ingresa a las siguientes rutas del proyecto:
 
-* **Documentación Técnica General:** [Revisa el archivo] (docs/architecture.md).
-* **Flujos y Requerimientos Funcionales:** [Revisa el archivo] (docs/user_stories.md).
-* **Prompts de Contexto Estratégico:** [Revisa el archivo] (docs/prompts.md).
-* **Archivos Gráficos en PDF:** [Explora la carpeta] (docs/assets/).
+* **Documentación Técnica General:** [Revisa el archivo](docs/architecture.md).
+* **Flujos y Requerimientos Funcionales:** [Revisa el archivo](docs/user_stories.md).
+* **Prompts de Contexto Estratégico:** [Revisa el archivo](docs/prompts.md).
+* **Archivos Gráficos en PDF:** [Explora la carpeta](docs/assets/).
 
 ---
 <br>

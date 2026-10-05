@@ -3,6 +3,7 @@
 Este documento describe la arquitectura técnica, la estructura de clases y el modelo de datos relacional para la plataforma **CYCLOPS**.
 
 ---
+<br>
 
 ## 1. Diagrama de Componentes
 
@@ -11,6 +12,7 @@ Ilustra la organización modular del sistema, detallando la separación entre la
 * **Diagrama de Componentes:** [Ver Diagrama en PDF](assets/component_diagram.pdf)
 
 ---
+<br>
 
 ## 2. Diagrama de Clases - Dominio y Servicios Backend
 
@@ -19,6 +21,7 @@ Define la estructura de objetos, servicios y tipos de datos que componen la lóg
 * **Diagrama de Clases:** [Ver Diagrama en PDF](assets/class_diagram.pdf)
 
 ---
+<br>
 
 ## 3. Diagrama Entidad-Relación - Base de Datos PostgreSQL
 

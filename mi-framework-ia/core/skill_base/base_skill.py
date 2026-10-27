@@ -1,4 +1,4 @@
-"""Contrato que toda skill debe cumplir: input/output schema y run()."""
+"""Contrato que toda skill debe cumplir: input output schema y metodo run."""
 
 from abc import ABC, abstractmethod
 

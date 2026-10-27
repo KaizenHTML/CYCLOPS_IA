@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYCLOPS SENTINEL</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <h1>CYCLOPS SENTINEL</h1>
+    </header>
+
+    <main class="main-container">
+
+        <nav class="nav-tabs">
+            <button class="tab-btn active" data-tab="tab-inferencia">
+                Inferencia en Tiempo Real
+            </button>
+            <button class="tab-btn" data-tab="tab-soc">
+                Consola de Triaje SOC <span class="badge-counter" id="badge-soc-count">0</span>
+            </button>
+            <button class="tab-btn" data-tab="tab-arquitectura">
+                Arquitectura y Documentación Técnica
+            </button>
+        </nav>
+
+        <section id="tab-inferencia" class="tab-panel active">
+            <div class="grid-two-columns">
+
+                <div class="column-half">
+                    <div class="card">
+                        <div class="card-title">
+                            <span>Ingesta de Mensaje Sospechoso</span>
+                            <span class="badge-counter">Analizador L1</span>
+                        </div>
+
+                        <div class="template-bar">
+                            <button type="button" id="tpl-phish-bank" class="btn-secondary btn-template-choice" data-template-key="bank">Phishing - Ataque Bancario</button>
+                            <button type="button" id="tpl-phish-creds" class="btn-secondary btn-template-choice" data-template-key="creds">Phishing - Credenciales</button>
+                            <button type="button" id="tpl-legit-meet" class="btn-secondary btn-template-choice" data-template-key="meet">Legítimo - Planificación</button>
+                            <button type="button" id="tpl-legit-notice" class="btn-secondary btn-template-choice" data-template-key="notice">Legítimo - Institucional</button>
+                            <button type="button" id="btn-clear-text" class="btn-secondary btn-clear">Limpiar</button>
+                        </div>
+
+                        <textarea id="email-text-input" class="text-area-input" placeholder="Pegue aqui el texto del correo electronico o mensaje sospechoso para someterlo a analisis heuristico y clasificacion..."></textarea>
+
+                        <div class="action-row">
+                            <span class="execution-pill" id="execution-time-label">Latencia: -</span>
+                            <button type="button" id="btn-analyze-email" class="btn-primary-action">Ejecutar Análisis de Seguridad</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-title">
+                            <span>Panel de Extracción de Métricas</span>
+                            <span class="badge-counter">Variables de Dominio</span>
+                        </div>
+
+                        <div class="metrics-grid">
+                            <div class="metric-tile">
+                                <div class="metric-key">char_count</div>
+                                <div class="metric-value" id="val-char-count">-</div>
+                                <div class="metric-desc">Caracteres totales</div>
+                            </div>
+                            <div class="metric-tile">
+                                <div class="metric-key">url_count</div>
+                                <div class="metric-value" id="val-url-count">-</div>
+                                <div class="metric-desc">Enlaces extraidos</div>
+                            </div>
+                            <div class="metric-tile">
+                                <div class="metric-key">has_url</div>
+                                <div class="metric-value" id="val-has-url">-</div>
+                                <div class="metric-desc">Presencia de URL</div>
+                            </div>
+                            <div class="metric-tile">
+                                <div class="metric-key">urgency_score</div>
+                                <div class="metric-value" id="val-urgency-score">-</div>
+                                <div class="metric-desc">Puntaje de urgencia</div>
+                            </div>
+                            <div class="metric-tile">
+                                <div class="metric-key">url_density</div>
+                                <div class="metric-value" id="val-url-density">-</div>
+                                <div class="metric-desc">Densidad de enlaces</div>
+                            </div>
+                            <div class="metric-tile">
+                                <div class="metric-key">urgency_density</div>
+                                <div class="metric-value" id="val-urgency-density">-</div>
+                                <div class="metric-desc">Densidad de urgencia</div>
+                            </div>
+                            <div class="metric-tile" id="tile-is-threat">
+                                <div class="metric-key">is_threat</div>
+                                <div class="metric-value" id="val-is-threat">-</div>
+                                <div class="metric-desc">Indicador de amenaza</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column-half">
+                    <div class="card">
+                        <div class="card-title">
+                            <span>Panel de Diagnóstico Predictivo</span>
+                            <span class="badge-counter">Inferencia ML</span>
+                        </div>
+
+                        <div class="diagnostic-box">
+                            <div id="verdict-banner" class="verdict-banner" style="background-color: #F8FAFD; border-color: #DDE8F4; color: #64748B;">
+                                <div class="verdict-info">
+                                    <h3 id="verdict-title">Esperando Análisis</h3>
+                                    <p id="verdict-desc">Seleccione una plantilla o ingrese un correo para activar el motor.</p>
+                                </div>
+                                <div id="verdict-risk-pill" class="risk-pill" style="background-color: #E2E8F0; color: #475569;">
+                                    INACTIVO
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="progress-labels">
+                                    <span>Probabilidad de Amenaza Calculada</span>
+                                    <span id="prob-value-text">0.0%</span>
+                                </div>
+                                <div class="progress-track">
+                                    <div id="prob-progress-fill" class="progress-fill" style="width: 0%; background-color: #CBD5E1;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-title">
+                            <span>Parámetros de Evaluación y Reglas de Decisión</span>
+                            <span class="badge-counter">Secuencia en Niveles</span>
+                        </div>
+
+                        <div id="decision-rules-container" class="rules-sequence">
+                            <div class="empty-state">
+                                Ejecute un analisis para visualizar la secuencia logica de decision en niveles.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="tab-soc" class="tab-panel">
+            <div class="card">
+                <div class="card-title">
+                    <span>Consola de Triaje y Respuesta para Analistas SOC</span>
+                    <span class="badge-counter">Monitoreo de Amenazas</span>
+                </div>
+
+                <p style="font-size: 14px; color: #64748B; margin-bottom: 20px; line-height: 1.6;">
+                    Cola de incidentes derivados para analisis forense de segundo nivel. Casos con certeza intermedia o alertas reportadas por empleados en espera de confirmacion definitiva.
+                </p>
+
+                <div class="data-table-container">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>ID Incidente</th>
+                                <th>Remitente Anonimizado</th>
+                                <th>Fecha y Hora</th>
+                                <th>Confianza IA</th>
+                                <th>Nivel Alerta</th>
+                                <th>Estado Operativo</th>
+                                <th>Acción Inmediata</th>
+                            </tr>
+                        </thead>
+                        <tbody id="soc-incidents-tbody">
+                            <tr>
+                                <td colspan="7" class="empty-state">Cargando incidentes del sistema...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-arquitectura" class="tab-panel">
+            <div class="card">
+                <div class="card-title">
+                    <span>Documentación Arquitectónica y Modelado Técnico</span>
+                    <span class="badge-counter">Especificación Assets</span>
+                </div>
+
+                <div class="doc-section-nav">
+                    <button class="doc-nav-btn active" data-doc="doc-historias">Historias de Usuario y Casos de Uso</button>
+                    <button class="doc-nav-btn" data-doc="doc-clases">Diagrama de Clases</button>
+                    <button class="doc-nav-btn" data-doc="doc-er">Diagrama Entidad-Relación</button>
+                    <button class="doc-nav-btn" data-doc="doc-componentes">Diagrama de Componentes</button>
+                    <button class="doc-nav-btn" data-doc="doc-requerimientos">Matriz de Requerimientos</button>
+                </div>
+
+                <div id="doc-historias" class="doc-card active">
+                    <h3 style="font-size: 16px; margin-bottom: 12px; color: #1E293B;">Flujo Operacional de Casos de Uso y Secuencia de Decisión</h3>
+                    <p style="font-size: 13px; color: #64748B; margin-bottom: 16px;">
+                        Mapeo condicional de interacción entre los tres roles del sistema: Empleado, Agente de Inteligencia Artificial CYCLOPS y Analista SOC.
+                    </p>
+
+                    <div class="diagram-canvas">
+                        <svg viewBox="0 0 920 380" width="100%" height="340" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="20" y="20" width="260" height="340" rx="16" fill="#F8FAFD" stroke="#DDE8F4" stroke-width="2"/>
+                            <text x="150" y="55" font-size="14" font-weight="bold" fill="#2E75D3" text-anchor="middle">Rol: Empleado</text>
+                            <rect x="40" y="80" width="220" height="90" rx="10" fill="#FFFFFF" stroke="#CBD5E1"/>
+                            <text x="150" y="110" font-size="12" font-weight="bold" fill="#1E293B" text-anchor="middle">HU01: Reportar Correo</text>
+                            <text x="150" y="130" font-size="11" fill="#64748B" text-anchor="middle">Envio sin alterar cabeceras</text>
+                            <text x="150" y="148" font-size="11" fill="#64748B" text-anchor="middle">originales del mensaje</text>
+
+                            <rect x="40" y="190" width="220" height="90" rx="10" fill="#FFFFFF" stroke="#CBD5E1"/>
+                            <text x="150" y="220" font-size="12" font-weight="bold" fill="#1E293B" text-anchor="middle">HU02: Retroalimentación</text>
+                            <text x="150" y="240" font-size="11" fill="#64748B" text-anchor="middle">Respuesta instantanea</text>
+                            <text x="150" y="258" font-size="11" fill="#64748B" text-anchor="middle">sobre el estado de revision</text>
+
+                            <rect x="330" y="20" width="260" height="340" rx="16" fill="#F8FAFD" stroke="#DDE8F4" stroke-width="2"/>
+                            <text x="460" y="55" font-size="14" font-weight="bold" fill="#2E75D3" text-anchor="middle">Rol: Agente IA CYCLOPS</text>
+                            <rect x="350" y="75" width="220" height="55" rx="8" fill="#FFFFFF" stroke="#CBD5E1"/>
+                            <text x="460" y="98" font-size="11" font-weight="bold" fill="#1E293B" text-anchor="middle">HU03: Preprocesamiento NLP</text>
+                            <text x="460" y="115" font-size="10" fill="#64748B" text-anchor="middle">Limpieza y anonimizacion</text>
+
+                            <rect x="350" y="140" width="220" height="55" rx="8" fill="#FFFFFF" stroke="#CBD5E1"/>
+                            <text x="460" y="163" font-size="11" font-weight="bold" fill="#1E293B" text-anchor="middle">HU04: Escalado Robusto</text>
+                            <text x="460" y="180" font-size="10" fill="#64748B" text-anchor="middle">RobustScaler y calculo de riesgo</text>
+
+                            <rect x="350" y="205" width="220" height="65" rx="8" fill="#EBF4FE" stroke="#2E75D3"/>
+                            <text x="460" y="228" font-size="11" font-weight="bold" fill="#2E75D3" text-anchor="middle">HU05 - HU06: Bifurcacion</text>
+                            <text x="460" y="245" font-size="10" fill="#1E293B" text-anchor="middle">Alta Certeza mayor o igual al 90%</text>
+                            <text x="460" y="260" font-size="10" fill="#065F46" text-anchor="middle">Cuarentena automatica directa</text>
+
+                            <rect x="350" y="280" width="220" height="60" rx="8" fill="#FEF3C7" stroke="#FCD34D"/>
+                            <text x="460" y="303" font-size="11" font-weight="bold" fill="#92400E" text-anchor="middle">HU07: Enrutamiento SOC</text>
+                            <text x="460" y="322" font-size="10" fill="#92400E" text-anchor="middle">Confianza media 50% a 89%</text>
+
+                            <rect x="640" y="20" width="260" height="340" rx="16" fill="#F8FAFD" stroke="#DDE8F4" stroke-width="2"/>
+                            <text x="770" y="55" font-size="14" font-weight="bold" fill="#2E75D3" text-anchor="middle">Rol: Analista SOC</text>
+
+                            <rect x="660" y="80" width="220" height="75" rx="10" fill="#FFFFFF" stroke="#CBD5E1"/>
+                            <text x="770" y="110" font-size="12" font-weight="bold" fill="#1E293B" text-anchor="middle">HU08: Triaje Priorizado</text>
+                            <text x="770" y="130" font-size="11" fill="#64748B" text-anchor="middle">Inspeccion de casos ambiguos</text>
+
+                            <rect x="660" y="170" width="220" height="75" rx="10" fill="#FFFFFF" stroke="#CBD5E1"/>
+                            <text x="770" y="200" font-size="12" font-weight="bold" fill="#1E293B" text-anchor="middle">HU09: Validacion Experta</text>
+                            <text x="770" y="220" font-size="11" fill="#64748B" text-anchor="middle">Confirmar o rechazar amenaza</text>
+
+                            <rect x="660" y="260" width="220" height="75" rx="10" fill="#FFFFFF" stroke="#CBD5E1"/>
+                            <text x="770" y="290" font-size="12" font-weight="bold" fill="#1E293B" text-anchor="middle">HU10: Mitigacion y Cierre</text>
+                            <text x="770" y="310" font-size="11" fill="#64748B" text-anchor="middle">Notificacion final al usuario</text>
+                        </svg>
+                    </div>
+
+                    <div class="spec-list">
+                        <div class="spec-item">
+                            <span class="spec-code">HU01 a HU02</span>
+                            <span class="spec-title">Ingesta y Confirmación Asíncrona</span>
+                            <div class="spec-desc">El usuario reporta el mensaje sospechoso y recibe confirmación inmediata sobre la recepción y estado del ticket en milisegundos.</div>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-code">HU03 a HU07</span>
+                            <span class="spec-title">Procesamiento y Clasificación Autónoma</span>
+                            <div class="spec-desc">El agente aplica tokenización, escalado mediante RobustScaler, inferencia en Scikit-Learn y bifurcación operativa según los umbrales de confianza establecidos.</div>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-code">HU08 a HU10</span>
+                            <span class="spec-title">Triaje y Respuesta Humana en Consola SOC</span>
+                            <div class="spec-desc">El analista de seguridad revisa métricas escaladas y toma decisiones forenses definitivas de aislamiento o restauración con un solo clic.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="doc-clases" class="doc-card">
+                    <h3 style="font-size: 16px; margin-bottom: 12px; color: #1E293B;">Diagrama de Clases del Dominio y Servicios Backend</h3>
+                    <p style="font-size: 13px; color: #64748B; margin-bottom: 16px;">
+                        Estructura orientada a objetos de las entidades y servicios que orquestan el pipeline analítico y la resolución de incidentes.
+                    </p>
+
+                    <div class="diagram-canvas">
+                        <svg viewBox="0 0 920 400" width="100%" height="380" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="20" y="20" width="260" height="170" rx="10" fill="#FFFFFF" stroke="#2E75D3" stroke-width="2"/>
+                            <rect x="20" y="20" width="260" height="35" rx="10" fill="#EBF4FE"/>
+                            <text x="150" y="44" font-size="14" font-weight="bold" fill="#2E75D3" text-anchor="middle">Incident</text>
+                            <text x="35" y="75" font-size="11" fill="#1E293B">+ String id</text>
+                            <text x="35" y="95" font-size="11" fill="#1E293B">+ String reporterId</text>
+                            <text x="35" y="115" font-size="11" fill="#1E293B">+ String status</text>
+                            <text x="35" y="135" font-size="11" fill="#1E293B">+ DateTime reportedAt</text>
+                            <line x1="20" y1="145" x2="280" y2="145" stroke="#DDE8F4"/>
+                            <text x="35" y="165" font-size="11" fill="#2E75D3">+ createIncident</text>
+                            <text x="35" y="180" font-size="11" fill="#2E75D3">+ updateStatus</text>
+
+                            <rect x="330" y="20" width="260" height="210" rx="10" fill="#FFFFFF" stroke="#2E75D3" stroke-width="2"/>
+                            <rect x="330" y="20" width="260" height="35" rx="10" fill="#EBF4FE"/>
+                            <text x="460" y="44" font-size="14" font-weight="bold" fill="#2E75D3" text-anchor="middle">EmailMetadata</text>
+                            <text x="345" y="75" font-size="11" fill="#1E293B">+ Int charCount</text>
+                            <text x="345" y="95" font-size="11" fill="#1E293B">+ Int wordCount</text>
+                            <text x="345" y="115" font-size="11" fill="#1E293B">+ Int urlCount</text>
+                            <text x="345" y="135" font-size="11" fill="#1E293B">+ Float urgencyScore</text>
+                            <text x="345" y="155" font-size="11" fill="#1E293B">+ Float scaledUrgencyScore</text>
+                            <text x="345" y="175" font-size="11" fill="#1E293B">+ Float urlDensity</text>
+                            <line x1="330" y1="185" x2="590" y2="185" stroke="#DDE8F4"/>
+                            <text x="345" y="205" font-size="11" fill="#2E75D3">+ extractFeatures</text>
+
+                            <rect x="640" y="20" width="260" height="150" rx="10" fill="#FFFFFF" stroke="#2E75D3" stroke-width="2"/>
+                            <rect x="640" y="20" width="260" height="35" rx="10" fill="#EBF4FE"/>
+                            <text x="770" y="44" font-size="14" font-weight="bold" fill="#2E75D3" text-anchor="middle">RobustScalerService</text>
+                            <text x="655" y="75" font-size="11" fill="#1E293B">+ String modelPath</text>
+                            <text x="655" y="95" font-size="11" fill="#1E293B">+ RobustScaler scaler</text>
+                            <line x1="640" y1="105" x2="900" y2="105" stroke="#DDE8F4"/>
+                            <text x="655" y="130" font-size="11" fill="#2E75D3">+ transform features</text>
+
+                            <rect x="20" y="240" width="260" height="140" rx="10" fill="#FFFFFF" stroke="#2E75D3" stroke-width="2"/>
+                            <rect x="20" y="240" width="260" height="35" rx="10" fill="#EBF4FE"/>
+                            <text x="150" y="264" font-size="14" font-weight="bold" fill="#2E75D3" text-anchor="middle">AIClassifierService</text>
+                            <text x="35" y="295" font-size="11" fill="#1E293B">+ Float confidenceThreshold</text>
+                            <line x1="20" y1="310" x2="280" y2="310" stroke="#DDE8F4"/>
+                            <text x="35" y="335" font-size="11" fill="#2E75D3">+ EvaluationResult predict</text>
+
+                            <rect x="330" y="250" width="260" height="130" rx="10" fill="#FFFFFF" stroke="#2E75D3" stroke-width="2"/>
+                            <rect x="330" y="250" width="260" height="35" rx="10" fill="#EBF4FE"/>
+                            <text x="460" y="274" font-size="14" font-weight="bold" fill="#2E75D3" text-anchor="middle">EvaluationResult</text>
+                            <text x="345" y="305" font-size="11" fill="#1E293B">+ Float confidenceScore</text>
+                            <text x="345" y="325" font-size="11" fill="#1E293B">+ String classification</text>
+                            <line x1="330" y1="335" x2="590" y2="335" stroke="#DDE8F4"/>
+                            <text x="345" y="360" font-size="11" fill="#2E75D3">+ Boolean isHighConfidence</text>
+
+                            <rect x="640" y="200" width="260" height="160" rx="10" fill="#FFFFFF" stroke="#2E75D3" stroke-width="2"/>
+                            <rect x="640" y="200" width="260" height="35" rx="10" fill="#EBF4FE"/>
+                            <text x="770" y="224" font-size="14" font-weight="bold" fill="#2E75D3" text-anchor="middle">SOCAnalystService</text>
+                            <text x="655" y="255" font-size="11" fill="#1E293B">+ List incidents</text>
+                            <line x1="640" y1="270" x2="900" y2="270" stroke="#DDE8F4"/>
+                            <text x="655" y="295" font-size="11" fill="#2E75D3">+ getPendingIncidents</text>
+                            <text x="655" y="320" font-size="11" fill="#2E75D3">+ resolveIncident</text>
+                        </svg>
+                    </div>
+                </div>
+
+                <div id="doc-er" class="doc-card">
+                    <h3 style="font-size: 16px; margin-bottom: 12px; color: #1E293B;">Modelo Entidad-Relación - Base de Datos PostgreSQL</h3>
+                    <p style="font-size: 13px; color: #64748B; margin-bottom: 16px;">
+                        Esquema relacional de trazabilidad de incidentes, metadatos, evaluaciones y registros de mitigación.
+                    </p>
+
+                    <div class="diagram-canvas">
+                        <svg viewBox="0 0 920 360" width="100%" height="340" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="20" y="20" width="160" height="130" rx="8" fill="#FFFFFF" stroke="#2E75D3" stroke-width="2"/>
+                            <rect x="20" y="20" width="160" height="30" rx="8" fill="#2E75D3"/>
+                            <text x="100" y="41" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">USERS</text>
+                            <text x="32" y="70" font-size="11" fill="#1E293B">PK id: string</text>
+                            <text x="32" y="90" font-size="11" fill="#1E293B">email: string</text>
+                            <text x="32" y="110" font-size="11" fill="#1E293B">department: string</text>
+                            <text x="32" y="130" font-size="11" fill="#1E293B">created_at: date</text>
+
+                            <rect x="230" y="20" width="180" height="150" rx="8" fill="#FFFFFF" stroke="#2E75D3" stroke-width="2"/>
+                            <rect x="230" y="20" width="180" height="30" rx="8" fill="#2E75D3"/>
+                            <text x="320" y="41" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">INCIDENTS</text>
+                            <text x="242" y="70" font-size="11" fill="#1E293B">PK id: string</text>
+                            <text x="242" y="90" font-size="11" fill="#2E75D3">FK reporter_id</text>
+                            <text x="242" y="110" font-size="11" fill="#1E293B">status: string</text>
+                            <text x="242" y="130" font-size="11" fill="#1E293B">alert_level: string</text>
+                            <text x="242" y="150" font-size="11" fill="#1E293B">reported_at: date</text>
+
+                            <rect x="460" y="20" width="200" height="190" rx="8" fill="#FFFFFF" stroke="#2E75D3" stroke-width="2"/>
+                            <rect x="460" y="20" width="200" height="30" rx="8" fill="#2E75D3"/>
+                            <text x="560" y="41" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">EMAIL_METADATA</text>
+                            <text x="472" y="70" font-size="11" fill="#1E293B">PK id: string</text>
+                            <text x="472" y="90" font-size="11" fill="#2E75D3">FK incident_id</text>
+                            <text x="472" y="110" font-size="11" fill="#1E293B">char_count: int</text>
+                            <text x="472" y="130" font-size="11" fill="#1E293B">word_count: int</text>
+                            <text x="472" y="150" font-size="11" fill="#1E293B">url_count: int</text>
+                            <text x="472" y="170" font-size="11" fill="#1E293B">urgency_score: float</text>
+                            <text x="472" y="190" font-size="11" fill="#1E293B">scaled_urgency: float</text>
+
+                            <rect x="710" y="20" width="190" height="160" rx="8" fill="#FFFFFF" stroke="#2E75D3" stroke-width="2"/>
+                            <rect x="710" y="20" width="190" height="30" rx="8" fill="#2E75D3"/>
+                            <text x="805" y="41" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">AI_EVALUATIONS</text>
+                            <text x="722" y="70" font-size="11" fill="#1E293B">PK id: string</text>
+                            <text x="722" y="90" font-size="11" fill="#2E75D3">FK incident_id</text>
+                            <text x="722" y="110" font-size="11" fill="#1E293B">confidence_score: float</text>
+                            <text x="722" y="130" font-size="11" fill="#1E293B">classification: string</text>
+                            <text x="722" y="150" font-size="11" fill="#1E293B">evaluated_at: date</text>
+
+                            <rect x="460" y="235" width="200" height="110" rx="8" fill="#FFFFFF" stroke="#2E75D3" stroke-width="2"/>
+                            <rect x="460" y="235" width="200" height="30" rx="8" fill="#2E75D3"/>
+                            <text x="560" y="256" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">MITIGATION_ACTIONS</text>
+                            <text x="472" y="285" font-size="11" fill="#1E293B">PK id: string</text>
+                            <text x="472" y="305" font-size="11" fill="#2E75D3">FK incident_id</text>
+                            <text x="472" y="325" font-size="11" fill="#1E293B">action_type: string</text>
+
+                            <line x1="180" y1="80" x2="230" y2="80" stroke="#2E75D3" stroke-width="2"/>
+                            <line x1="410" y1="80" x2="460" y2="80" stroke="#2E75D3" stroke-width="2"/>
+                            <line x1="660" y1="80" x2="710" y2="80" stroke="#2E75D3" stroke-width="2"/>
+                            <line x1="320" y1="170" x2="320" y2="280" stroke="#2E75D3" stroke-width="2"/>
+                            <line x1="320" y1="280" x2="460" y2="280" stroke="#2E75D3" stroke-width="2"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div id="doc-componentes" class="doc-card">
+                    <h3 style="font-size: 16px; margin-bottom: 12px; color: #1E293B;">Diagrama de Componentes del Sistema</h3>
+                    <p style="font-size: 13px; color: #64748B; margin-bottom: 16px;">
+                        Distribución de capas: Presentación en React, Orquestación en FastAPI, Pipeline de IA y Base de Datos PostgreSQL.
+                    </p>
+
+                    <div class="diagram-canvas">
+                        <svg viewBox="0 0 920 320" width="100%" height="300" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="20" y="20" width="200" height="280" rx="12" fill="#EBF4FE" stroke="#2E75D3" stroke-width="2"/>
+                            <text x="120" y="50" font-size="13" font-weight="bold" fill="#2E75D3" text-anchor="middle">Frontend Presentation</text>
+                            <rect x="35" y="70" width="170" height="50" rx="8" fill="#FFFFFF" stroke="#CBD5E1"/>
+                            <text x="120" y="100" font-size="11" font-weight="bold" fill="#1E293B" text-anchor="middle">UI Dashboard</text>
+                            <rect x="35" y="135" width="170" height="50" rx="8" fill="#FFFFFF" stroke="#CBD5E1"/>
+                            <text x="120" y="165" font-size="11" font-weight="bold" fill="#1E293B" text-anchor="middle">Consola Analista SOC</text>
+                            <rect x="35" y="200" width="170" height="50" rx="8" fill="#FFFFFF" stroke="#CBD5E1"/>
+                            <text x="120" y="230" font-size="11" font-weight="bold" fill="#1E293B" text-anchor="middle">Formulario Reporte</text>
+
+                            <rect x="250" y="20" width="200" height="280" rx="12" fill="#F8FAFD" stroke="#2E75D3" stroke-width="2"/>
+                            <text x="350" y="50" font-size="13" font-weight="bold" fill="#2E75D3" text-anchor="middle">Backend FastAPI</text>
+                            <rect x="265" y="70" width="170" height="50" rx="8" fill="#FFFFFF" stroke="#CBD5E1"/>
+                            <text x="350" y="100" font-size="11" font-weight="bold" fill="#1E293B" text-anchor="middle">REST Orchestrator</text>
+                            <rect x="265" y="135" width="170" height="50" rx="8" fill="#FFFFFF" stroke="#CBD5E1"/>
+                            <text x="350" y="165" font-size="11" font-weight="bold" fill="#1E293B" text-anchor="middle">Decision Engine</text>
+                            <rect x="265" y="200" width="170" height="50" rx="8" fill="#FFFFFF" stroke="#CBD5E1"/>
+                            <text x="350" y="230" font-size="11" font-weight="bold" fill="#1E293B" text-anchor="middle">Background Tasks</text>
+
+                            <rect x="480" y="20" width="200" height="280" rx="12" fill="#F8FAFD" stroke="#2E75D3" stroke-width="2"/>
+                            <text x="580" y="50" font-size="13" font-weight="bold" fill="#2E75D3" text-anchor="middle">Pipeline de IA</text>
+                            <rect x="495" y="70" width="170" height="50" rx="8" fill="#FFFFFF" stroke="#CBD5E1"/>
+                            <text x="580" y="100" font-size="11" font-weight="bold" fill="#1E293B" text-anchor="middle">NLP Text Cleaner</text>
+                            <rect x="495" y="135" width="170" height="50" rx="8" fill="#FFFFFF" stroke="#CBD5E1"/>
+                            <text x="580" y="165" font-size="11" font-weight="bold" fill="#1E293B" text-anchor="middle">RobustScaler Tool</text>
+                            <rect x="495" y="200" width="170" height="50" rx="8" fill="#FFFFFF" stroke="#CBD5E1"/>
+                            <text x="580" y="230" font-size="11" font-weight="bold" fill="#1E293B" text-anchor="middle">Scikit Classifier</text>
+
+                            <rect x="710" y="20" width="190" height="280" rx="12" fill="#EBF4FE" stroke="#2E75D3" stroke-width="2"/>
+                            <text x="805" y="50" font-size="13" font-weight="bold" fill="#2E75D3" text-anchor="middle">Persistencia</text>
+                            <rect x="725" y="110" width="160" height="90" rx="8" fill="#FFFFFF" stroke="#CBD5E1"/>
+                            <text x="805" y="150" font-size="13" font-weight="bold" fill="#1E293B" text-anchor="middle">PostgreSQL</text>
+                            <text x="805" y="175" font-size="11" fill="#64748B" text-anchor="middle">Almacen Relacional</text>
+                        </svg>
+                    </div>
+                </div>
+
+                <div id="doc-requerimientos" class="doc-card">
+                    <h3 style="font-size: 16px; margin-bottom: 12px; color: #1E293B;">Matriz de Requerimientos Funcionales y No Funcionales</h3>
+                    <p style="font-size: 13px; color: #64748B; margin-bottom: 16px;">
+                        Verificación formal de requerimientos de software según el PRD de CYCLOPS.
+                    </p>
+
+                    <div class="data-table-container">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Categoría</th>
+                                    <th>Descripción de la Especificación</th>
+                                    <th>Estado MVP</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>RF01</strong></td>
+                                    <td>Ingesta de Reportes</td>
+                                    <td>Recepción de solicitudes con texto del correo y datos del remitente.</td>
+                                    <td><span style="background-color: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">100% OPERATIVO</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>RF02</strong></td>
+                                    <td>Preprocesamiento NLP</td>
+                                    <td>Limpieza de texto, extracción de métricas léxicas y anonimización.</td>
+                                    <td><span style="background-color: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">100% OPERATIVO</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>RF03</strong></td>
+                                    <td>Escalado Robusto</td>
+                                    <td>Transformación estadística mediante RobustScaler para aislar atípicos.</td>
+                                    <td><span style="background-color: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">100% OPERATIVO</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>RF04</strong></td>
+                                    <td>Clasificación ML</td>
+                                    <td>Cálculo de probabilidad probabilística de phishing con Scikit-Learn.</td>
+                                    <td><span style="background-color: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">100% OPERATIVO</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>RF05</strong></td>
+                                    <td>Motor Híbrido</td>
+                                    <td>Automatización directa con certeza mayor o igual al 90% o triaje SOC entre 50% y 89%.</td>
+                                    <td><span style="background-color: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">100% OPERATIVO</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>RF06</strong></td>
+                                    <td>Persistencia</td>
+                                    <td>Registro del historial de incidentes, metadatos y acciones de mitigación.</td>
+                                    <td><span style="background-color: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">100% OPERATIVO</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>RF07</strong></td>
+                                    <td>Consola SOC</td>
+                                    <td>Interfaz interactiva para inspección forense y resolución inmediata.</td>
+                                    <td><span style="background-color: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">100% OPERATIVO</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>RNF01</strong></td>
+                                    <td>Latencia</td>
+                                    <td>Respuesta de ingesta y evaluación en menos de doscientos milisegundos.</td>
+                                    <td><span style="background-color: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">CUMPLIDO MENOR A 50MS</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>RNF02</strong></td>
+                                    <td>Arquitectura</td>
+                                    <td>Desacoplamiento limpio entre componentes de dominio, servicios y presentación.</td>
+                                    <td><span style="background-color: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">CUMPLIDO CLEAN ARCH</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>RNF03</strong></td>
+                                    <td>Diseño UI</td>
+                                    <td>Estilo moderno pastel con bordes suaves, navegación clara y alta usabilidad.</td>
+                                    <td><span style="background-color: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">CUMPLIDO PASTEL UI</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        CYCLOPS SENTINEL
+    </footer>
+
+    <script>
+    const templatesDict = {
+        bank: "URGENTE: Notificacion de Seguridad Bancaria. Su cuenta ha sido bloqueada temporalmente por actividad inusual en las ultimas 24 horas. Para reactivar su acceso y evitar la suspension definitiva de sus fondos, ingrese de inmediato al enlace y verifique sus credenciales bancarias: https://banco-seguridad-verificacion.com/login?id=92847. Si no completa la verificacion antes de 24 horas, sus activos seran retenidos.",
+        creds: "ALERTA CRITICA DE TI: Su contraseña institucional expira el dia de hoy. De no actualizar sus datos de acceso inmediatamente, perdera comunicacion corporativa y sus cuentas seran restringidas. Haga clic aqui para confirmar su identidad: https://portal-soporte-autenticacion-corporativa.net/auth. Requerido por el area de Seguridad Informatica.",
+        meet: "Estimado equipo, les comparto la agenda para la sesion de planeacion trimestral del proximo martes en la sala de conferencias B. Revisaremos los avances de los objetivos anuales y definiremos los siguientes entregables del proyecto. Agradezco confirmar su asistencia con anticipacion. Saludos cordiales.",
+        notice: "Apreciados colaboradores, les recordamos que este viernes se llevara a cabo la jornada de bienestar y capacitacion interna. Las actividades daran inicio a las nueve de la mañana en el auditorio central. Esperamos contar con su participacion activa. Atentamente, Direccion de Talento Humano."
+    };
+
+    function setTemplate(key) {
+        const area = document.getElementById("email-text-input");
+        if (area && templatesDict[key]) {
+            area.value = templatesDict[key];
+            area.style.borderColor = "#2E75D3";
+            setTimeout(function () {
+                area.style.borderColor = "#DDE8F4";
+            }, 300);
+        }
+    }
+
+    function initButtons() {
+        const elBank = document.getElementById("tpl-phish-bank");
+        if (elBank) {
+            elBank.onclick = function () { setTemplate("bank"); };
+        }
+        const elCreds = document.getElementById("tpl-phish-creds");
+        if (elCreds) {
+            elCreds.onclick = function () { setTemplate("creds"); };
+        }
+        const elMeet = document.getElementById("tpl-legit-meet");
+        if (elMeet) {
+            elMeet.onclick = function () { setTemplate("meet"); };
+        }
+        const elNotice = document.getElementById("tpl-legit-notice");
+        if (elNotice) {
+            elNotice.onclick = function () { setTemplate("notice"); };
+        }
+        const elClear = document.getElementById("btn-clear-text");
+        if (elClear) {
+            elClear.onclick = function () {
+                const area = document.getElementById("email-text-input");
+                if (area) {
+                    area.value = "";
+                }
+                resetPanels();
+            };
+        }
+        const elAnalyze = document.getElementById("btn-analyze-email");
+        if (elAnalyze) {
+            elAnalyze.onclick = function () {
+                const area = document.getElementById("email-text-input");
+                const rawText = area ? area.value.trim() : "";
+                if (!rawText) {
+                    alert("Por favor ingrese o seleccione un mensaje para analizar.");
+                    return;
+                }
+                performAnalysis(rawText, elAnalyze);
+            };
+        }
+
+        const tabButtons = document.querySelectorAll(".tab-btn");
+        const tabPanels = document.querySelectorAll(".tab-panel");
+        tabButtons.forEach(function (btn) {
+            btn.onclick = function () {
+                const target = btn.getAttribute("data-tab");
+                tabButtons.forEach(function (b) { b.classList.remove("active"); });
+                tabPanels.forEach(function (p) { p.classList.remove("active"); });
+                btn.classList.add("active");
+                const targetEl = document.getElementById(target);
+                if (targetEl) {
+                    targetEl.classList.add("active");
+                }
+                if (target === "tab-soc") {
+                    fetchIncidents();
+                }
+            };
+        });
+
+        const docButtons = document.querySelectorAll(".doc-nav-btn");
+        const docCards = document.querySelectorAll(".doc-card");
+        docButtons.forEach(function (btn) {
+            btn.onclick = function () {
+                const docId = btn.getAttribute("data-doc");
+                docButtons.forEach(function (b) { b.classList.remove("active"); });
+                docCards.forEach(function (c) { c.classList.remove("active"); });
+                btn.classList.add("active");
+                const cardEl = document.getElementById(docId);
+                if (cardEl) {
+                    cardEl.classList.add("active");
+                }
+            };
+        });
+
+        fetchIncidents();
+    }
+
+    document.addEventListener("DOMContentLoaded", initButtons);
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+        initButtons();
+    }
+
+    document.addEventListener("click", function (e) {
+        const target = e.target;
+        if (!target) {
+            return;
+        }
+        const tplBtn = target.closest(".btn-template-choice");
+        if (tplBtn) {
+            const key = tplBtn.getAttribute("data-template-key");
+            setTemplate(key);
+            return;
+        }
+        const socActionBtn = target.closest(".soc-action-btn");
+        if (socActionBtn) {
+            const incId = socActionBtn.getAttribute("data-incident-id");
+            const actType = socActionBtn.getAttribute("data-action-type");
+            resolveIncidentAction(incId, actType);
+            return;
+        }
+    });
+
+    function resetPanels() {
+        document.getElementById("val-char-count").innerText = "-";
+        document.getElementById("val-url-count").innerText = "-";
+        document.getElementById("val-has-url").innerText = "-";
+        document.getElementById("val-urgency-score").innerText = "-";
+        document.getElementById("val-url-density").innerText = "-";
+        document.getElementById("val-urgency-density").innerText = "-";
+        document.getElementById("val-is-threat").innerText = "-";
+
+        const verdictBanner = document.getElementById("verdict-banner");
+        verdictBanner.className = "verdict-banner";
+        verdictBanner.style.backgroundColor = "#F8FAFD";
+        verdictBanner.style.borderColor = "#DDE8F4";
+        verdictBanner.style.color = "#64748B";
+
+        document.getElementById("verdict-title").innerText = "Esperando Analisis";
+        document.getElementById("verdict-desc").innerText = "Ingrese un texto y presione Ejecutar Analisis de Seguridad";
+        document.getElementById("verdict-risk-pill").innerText = "INACTIVO";
+        document.getElementById("verdict-risk-pill").style.backgroundColor = "#E2E8F0";
+        document.getElementById("verdict-risk-pill").style.color = "#475569";
+
+        document.getElementById("prob-progress-fill").style.width = "0%";
+        document.getElementById("prob-progress-fill").style.backgroundColor = "#CBD5E1";
+        document.getElementById("prob-value-text").innerText = "0.0%";
+
+        const rulesContainer = document.getElementById("decision-rules-container");
+        rulesContainer.innerHTML = '<div class="empty-state">Ejecute un analisis para visualizar la secuencia logica de decision en niveles.</div>';
+        document.getElementById("execution-time-label").innerText = "Latencia: -";
+    }
+
+    function performAnalysis(text, analyzeBtn) {
+        if (analyzeBtn) {
+            analyzeBtn.disabled = true;
+            analyzeBtn.innerText = "Analizando...";
+        }
+
+        fetch("/api/analyze", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                raw_text: text,
+                reporter_id: "emp.usr.001"
+            })
+        })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+            if (analyzeBtn) {
+                analyzeBtn.disabled = false;
+                analyzeBtn.innerText = "Ejecutar Analisis de Seguridad";
+            }
+            updateUIWithResults(data);
+        })
+        .catch(function () {
+            if (analyzeBtn) {
+                analyzeBtn.disabled = false;
+                analyzeBtn.innerText = "Ejecutar Analisis de Seguridad";
+            }
+            alert("Error al conectar con el motor de inferencia CYCLOPS SENTINEL.");
+        });
+    }
+
+    function updateUIWithResults(data) {
+        const meta = data.metadata;
+        const evalData = data.evaluation;
+
+        document.getElementById("val-char-count").innerText = meta.char_count;
+        document.getElementById("val-url-count").innerText = meta.url_count;
+        document.getElementById("val-has-url").innerText = meta.has_url === 1 ? "SI" : "NO";
+        document.getElementById("val-urgency-score").innerText = meta.urgency_score;
+        document.getElementById("val-url-density").innerText = meta.url_density + "%";
+        document.getElementById("val-urgency-density").innerText = meta.urgency_density + "%";
+        document.getElementById("val-is-threat").innerText = meta.is_threat ? "POSITIVO" : "NEGATIVO";
+
+        const isThreatTile = document.getElementById("tile-is-threat");
+        if (meta.is_threat) {
+            isThreatTile.style.borderColor = "#FCA5A5";
+            document.getElementById("val-is-threat").style.color = "#991B1B";
+        } else {
+            isThreatTile.style.borderColor = "#6EE7B7";
+            document.getElementById("val-is-threat").style.color = "#065F46";
+        }
+
+        const banner = document.getElementById("verdict-banner");
+        const vTitle = document.getElementById("verdict-title");
+        const vDesc = document.getElementById("verdict-desc");
+        const vPill = document.getElementById("verdict-risk-pill");
+        const fill = document.getElementById("prob-progress-fill");
+        const pVal = document.getElementById("prob-value-text");
+
+        pVal.innerText = evalData.confidence_score + "%";
+        fill.style.width = evalData.confidence_score + "%";
+
+        banner.className = "verdict-banner";
+        if (evalData.risk_level === "CRITICO") {
+            banner.classList.add("verdict-critical");
+            vPill.style.backgroundColor = "#FEE2E2";
+            vPill.style.color = "#991B1B";
+            fill.style.backgroundColor = "#EF4444";
+        } else if (evalData.risk_level === "MEDIO") {
+            banner.classList.add("verdict-medium");
+            vPill.style.backgroundColor = "#FEF3C7";
+            vPill.style.color = "#92400E";
+            fill.style.backgroundColor = "#F59E0B";
+        } else {
+            banner.classList.add("verdict-safe");
+            vPill.style.backgroundColor = "#D1FAE5";
+            vPill.style.color = "#065F46";
+            fill.style.backgroundColor = "#10B981";
+        }
+
+        vTitle.innerText = evalData.classification;
+        vDesc.innerText = evalData.summary;
+        vPill.innerText = "RIESGO " + evalData.risk_level;
+
+        const container = document.getElementById("decision-rules-container");
+        container.innerHTML = "";
+        evalData.decision_levels.forEach(function (lvl) {
+            const card = document.createElement("div");
+            card.className = "rule-level-card";
+            card.innerHTML = '<div class="rule-header"><span class="rule-title">' + lvl.level + '</span><span class="rule-badge">' + lvl.status + '</span></div><div class="rule-details">' + lvl.details + '</div>';
+            container.appendChild(card);
+        });
+
+        document.getElementById("execution-time-label").innerText = "Latencia Inferencia: " + data.execution_time_ms + " ms";
+        fetchIncidents();
+    }
+
+    function fetchIncidents() {
+        fetch("/api/incidents")
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+            renderIncidentsTable(data.incidents);
+            const badge = document.getElementById("badge-soc-count");
+            if (badge) {
+                badge.innerText = data.pending_count;
+            }
+        })
+        .catch(function () {});
+    }
+
+    function renderIncidentsTable(incidents) {
+        const tbody = document.getElementById("soc-incidents-tbody");
+        if (!tbody) { return; }
+        if (!incidents || incidents.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No hay incidentes registrados en el sistema.</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = "";
+        incidents.forEach(function (inc) {
+            const tr = document.createElement("tr");
+            const conf = inc.evaluation ? inc.evaluation.confidence_score + "%" : "-";
+            const risk = inc.evaluation ? inc.evaluation.risk_level : inc.alert_level;
+
+            let statusBadge = '<span style="background-color: #E2E8F0; color: #475569; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">' + inc.status + '</span>';
+            if (inc.status === "PENDING_SOC_REVIEW") {
+                statusBadge = '<span style="background-color: #FEF3C7; color: #92400E; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">REVISION SOC</span>';
+            } else if (inc.status === "RESOLVED_QUARANTINE" || inc.status === "AUTO_MITIGATED_QUARANTINE") {
+                statusBadge = '<span style="background-color: #FEE2E2; color: #991B1B; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">CUARENTENA</span>';
+            } else if (inc.status === "RESOLVED_FALSE_POSITIVE" || inc.status === "MARKED_AS_SAFE") {
+                statusBadge = '<span style="background-color: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">SEGURO</span>';
+            }
+
+            let actionButtons = '-';
+            if (inc.status === "PENDING_SOC_REVIEW" || inc.status === "PENDING_ANALYSIS") {
+                actionButtons = '<div style="display: flex; gap: 6px;"><button type="button" class="btn-action-small btn-threat-confirm soc-action-btn" data-incident-id="' + inc.id + '" data-action-type="CONFIRMED_THREAT">Aislar</button><button type="button" class="btn-action-small btn-safe-confirm soc-action-btn" data-incident-id="' + inc.id + '" data-action-type="FALSE_POSITIVE">Restaurar</button></div>';
+            }
+
+            const sender = inc.metadata ? inc.metadata.anonymized_sender : "usuario@corporativo.com";
+
+            tr.innerHTML = '<td><strong>' + inc.id + '</strong></td><td>' + sender + '</td><td>' + inc.reported_at + '</td><td>' + conf + '</td><td>' + risk + '</td><td>' + statusBadge + '</td><td>' + actionButtons + '</td>';
+            tbody.appendChild(tr);
+        });
+    }
+
+    function resolveIncidentAction(incidentId, action) {
+        fetch("/api/incidents/" + incidentId + "/resolve", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ action: action })
+        })
+        .then(function (res) { return res.json(); })
+        .then(function () {
+            fetchIncidents();
+        });
+    }
+    </script>
+</body>
+</html>

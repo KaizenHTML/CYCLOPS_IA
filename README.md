@@ -141,3 +141,36 @@ Panel de control de alta densidad de información diseñado para que el analista
 * **Acciones Inmediatas de Mitigación:** Botones directos para confirmar phishing y aislar el activo en la red, o declarar falso positivo y restaurar el mensaje en la bandeja del usuario.
 
 
+
+## Generación del Prototipo MVP con Google Antigravity
+
+Para la construcción de la interfaz gráfica interactiva del Producto Mínimo Viable -MVP-, se utilizó la herramienta Google Antigravity mediante un proceso de ingeniería de prompts guiado por la documentación arquitectónica del proyecto.
+
+### Prompt Utilizado para la Generación
+
+```text
+Actúa como un Arquitecto de Software Principal, Especialista en UX/UI Enterprise y Desarrollador Full-Stack. Realiza una auditoría y análisis exhaustivo de toda la estructura de carpetas de este workspace, prestando especial atención al directorio "assets/".
+
+Tu objetivo principal es interpretar la documentación arquitectónica existente -historias de usuario, matriz de requerimientos funcionales y no funcionales, diagramas de clases, diagramas de componentes, diagramas de casos de uso y modelo entidad-relación presentes en "assets/"- y construir autónomamente la interfaz gráfica interactiva del Producto Mínimo Viable -MVP- del sistema CYCLOPS SENTINEL.
+
+Selecciona la tecnología web más rápida, ligera y fácil de desplegar -por ejemplo Python con Streamlit o Gradio, o una interfaz web interactiva autosuficiente- garantizando que sea 100 por ciento funcional y ejecutable mediante un único comando en terminal.
+
+Fases de Ejecución Esperadas:
+
+1. Auditoría y Lectura de Documentación Técnica en "assets/":
+   - Analiza las historias de usuario y requerimientos funcionales para extraer los flujos de interacción clave del usuario y del analista de ciberseguridad.
+   - Revisa el diagrama de clases y el modelo entidad-relación para asegurar que los componentes visuales de la interfaz reflejen fielmente las entidades y métricas del dominio de datos -char_count, url_count, has_url, urgency_score, url_density, urgency_density e is_threat-.
+   - Examina el diagrama de componentes y casos de uso para estructurar los módulos principales del prototipo.
+
+2. Módulos Obligatorios de la Interfaz del MVP:
+   - Módulo de Inferencia en Tiempo Real: Área de texto interactiva para ingresar mensajes sospechosos, botones de prueba rápida para plantillas preconfiguradas -Phishing y Legítimo- y acción de análisis.
+   - Panel de Extracción de Métricas: Despliegue en pantalla de los datos extraídos e indicadores sintéticos de densidad.
+   - Panel de Diagnóstico Predictivo: Veredicto claro con nivel de riesgo y probabilidad calculada.
+   - Panel de Explicabilidad y Reglas de Decisión: Sección denominada Parámetros de Evaluación y Reglas de Decisión que desglose la secuencia lógica de evaluación en niveles.
+   - Vista de Arquitectura y Documentación: Pestaña o módulo interactivo donde se visualicen los diagramas de casos de uso, diagrama de clases y requerimientos extraídos de la carpeta "assets/".
+
+Restricciones Estrictas de Formato, Estilo y Código:
+- Aplicar un estilo visual elegante y moderno con una paleta de colores pasteles azules y blancos, bordes redondeados y tipografía clara.
+- Queda estrictamente prohibido utilizar el signo de paréntesis en cualquier parte de la interfaz gráfica, etiquetas, textos explicativos, logs, encabezados o comentarios del código. Utiliza comas, guiones o puntos en su lugar.
+- Mantén limpia la cabecera y el pie de página, mostrando únicamente el nombre oficial del sistema: CYCLOPS SENTINEL.
+- Proporciona en la terminal las instrucciones exactas de ejecución al finalizar la generación de archivos.

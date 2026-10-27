@@ -1,1 +1,1 @@
-"""Define qué puede hacer cada agente/skill (principio de mínimo privilegio)."""
+"""Define que puede hacer cada agente o skill - principio de minimo privilegio -."""

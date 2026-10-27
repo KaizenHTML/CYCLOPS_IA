@@ -1,1 +1,1 @@
-"""Memoria persistente (vectorial/relacional) entre sesiones."""
+"""Memoria persistente - vectorial o relacional - entre sesiones."""

@@ -140,7 +140,8 @@ Panel de control de alta densidad de información diseñado para que el analista
   * Módulo de explicabilidad del modelo de IA indicando los vectores de riesgo específicos identificados en el mensaje.
 * **Acciones Inmediatas de Mitigación:** Botones directos para confirmar phishing y aislar el activo en la red, o declarar falso positivo y restaurar el mensaje en la bandeja del usuario.
 
-
+---
+<br>
 
 ## Generación del Prototipo MVP con Google Antigravity
 

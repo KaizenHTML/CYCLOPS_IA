@@ -238,7 +238,7 @@ function fetchIncidents() {
         renderIncidentsTable(data.incidents);
         const badge = document.getElementById("badge-soc-count");
         if (badge) {
-            badge.innerText = data.pending_count;
+            badge.innerText = data.total_count || 0;
         }
     })
     .catch(function () {});
@@ -248,7 +248,7 @@ function renderIncidentsTable(incidents) {
     const tbody = document.getElementById("soc-incidents-tbody");
     if (!tbody) { return; }
     if (!incidents || incidents.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No hay incidentes registrados en el sistema.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No hay analisis registrados en el sistema.</td></tr>';
         return;
     }
 
@@ -258,37 +258,24 @@ function renderIncidentsTable(incidents) {
         const conf = inc.evaluation ? inc.evaluation.confidence_score + "%" : "-";
         const risk = inc.evaluation ? inc.evaluation.risk_level : inc.alert_level;
 
-        let statusBadge = '<span style="background-color: #E2E8F0; color: #475569; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">' + inc.status + '</span>';
-        if (inc.status === "PENDING_SOC_REVIEW") {
-            statusBadge = '<span style="background-color: #FEF3C7; color: #92400E; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">REVISION SOC</span>';
-        } else if (inc.status === "RESOLVED_QUARANTINE" || inc.status === "AUTO_MITIGATED_QUARANTINE") {
-            statusBadge = '<span style="background-color: #FEE2E2; color: #991B1B; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">CUARENTENA</span>';
-        } else if (inc.status === "RESOLVED_FALSE_POSITIVE" || inc.status === "MARKED_AS_SAFE") {
-            statusBadge = '<span style="background-color: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">SEGURO</span>';
-        }
+        let statusBadge = '<span style="background-color: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">LEGITIMO</span>';
+        let recBadge = '<span style="background-color: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">Seguro</span>';
 
-        let actionButtons = '-';
-        if (inc.status === "PENDING_SOC_REVIEW" || inc.status === "PENDING_ANALYSIS") {
-            actionButtons = '<div style="display: flex; gap: 6px;"><button class="btn-action-small btn-threat-confirm soc-action-btn" data-incident-id="' + inc.id + '" data-action-type="CONFIRMED_THREAT">Aislar</button><button class="btn-action-small btn-safe-confirm soc-action-btn" data-incident-id="' + inc.id + '" data-action-type="FALSE_POSITIVE">Restaurar</button></div>';
+        if (risk === "CRITICO") {
+            statusBadge = '<span style="background-color: #FEE2E2; color: #991B1B; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">PHISHING</span>';
+            recBadge = '<span style="background-color: #FEE2E2; color: #991B1B; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">Bloquear y Eliminar</span>';
+        } else if (risk === "MEDIO") {
+            statusBadge = '<span style="background-color: #FEF3C7; color: #92400E; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">SOSPECHOSO</span>';
+            recBadge = '<span style="background-color: #FEF3C7; color: #92400E; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">Precaucion</span>';
         }
 
         const sender = inc.metadata ? inc.metadata.anonymized_sender : "usuario@corporativo.com";
 
-        tr.innerHTML = '<td><strong>' + inc.id + '</strong></td><td>' + sender + '</td><td>' + inc.reported_at + '</td><td>' + conf + '</td><td>' + risk + '</td><td>' + statusBadge + '</td><td>' + actionButtons + '</td>';
+        tr.innerHTML = '<td><strong>' + inc.id + '</strong></td><td>' + sender + '</td><td>' + inc.reported_at + '</td><td>' + conf + '</td><td>' + risk + '</td><td>' + statusBadge + '</td><td>' + recBadge + '</td>';
         tbody.appendChild(tr);
     });
 }
 
 function resolveIncidentAction(incidentId, action) {
-    fetch("/api/incidents/" + incidentId + "/resolve", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ action: action })
-    })
-    .then(function (res) { return res.json(); })
-    .then(function () {
-        fetchIncidents();
-    });
+    fetchIncidents();
 }

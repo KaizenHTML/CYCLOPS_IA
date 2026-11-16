@@ -137,27 +137,27 @@ class AIClassifierService:
 
         confidence_pct = round(prob_phishing * 100.0, 1)
 
-        if prob_phishing >= 0.90:
+        if prob_phishing >= 0.75:
             classification = "PHISHING CONFIRMADO"
             risk_level = "CRITICO"
-            action = "AUTO_MITIGATED_QUARANTINE"
+            action = "USER_ALERT_HIGH"
             metadata.is_threat = True
-            action_label = "Cuarentena Automatica Inmediata"
-            summary = "Amenaza de phishing detectada con certeza superior al 90%. El mensaje contiene hipervinculos y multiples inductores de urgencia coercitiva. El sistema activo la cuarentena y aislamiento sin intervencion del analista."
-        elif prob_phishing >= 0.50:
+            action_label = "Amenaza Critica - Bloqueo Inmediato"
+            summary = "Amenaza de phishing detectada con alta probabilidad. El mensaje contiene hipervinculos y multiples inductores de urgencia coercitiva. Se recomienda al usuario eliminar el correo y no interactuar con sus enlaces."
+        elif prob_phishing >= 0.40:
             classification = "PHISHING SOSPECHOSO"
             risk_level = "MEDIO"
-            action = "ROUTED_TO_SOC_CONSOLE"
+            action = "USER_ALERT_CAUTION"
             metadata.is_threat = True
-            action_label = "Derivacion a Consola de Triaje SOC"
-            summary = "Puntaje de riesgo intermedio entre 50% y 89%. Presenta indicios de riesgo que ameritan analisis forense L2 en la consola de triaje para confirmacion humana."
+            action_label = "Advertencia de Precaucion al Usuario"
+            summary = "Puntaje de riesgo intermedio. Presenta indicios sospechosos que ameritan revision preventiva. Se recomienda verificar la identidad del remitente antes de responder."
         else:
             classification = "LEGITIMO"
             risk_level = "BAJO"
             action = "MARKED_AS_SAFE"
             metadata.is_threat = False
             action_label = "Marcado como Seguro"
-            summary = "Mensaje sin presencia significativa de patrones maliciosos ni enlaces de riesgo. Clasificado como legitimo y seguro para el usuario corporativo."
+            summary = "Mensaje sin presencia significativa de patrones maliciosos ni enlaces de riesgo. Clasificado como seguro para el usuario."
 
         decision_levels = [
             {
@@ -176,9 +176,9 @@ class AIClassifierService:
                 "details": f"Evaluacion mediante clasificador Scikit-Learn. Probabilidad calculada de amenaza situada en {confidence_pct}%."
             },
             {
-                "level": "Nivel 4 - Bifurcacion y Reglas de Decision",
+                "level": "Nivel 4 - Diagnostico Directo al Usuario",
                 "status": "Completado",
-                "details": f"Umbral evaluado. Resultado asignado a la via operacional {action_label}. Nivel de riesgo catalogado como {risk_level}."
+                "details": f"Veredicto emitido sin intermediarios. Recomendacion directa al usuario: {action_label}. Nivel de riesgo catalogado como {risk_level}."
             }
         ]
 
@@ -191,7 +191,7 @@ class AIClassifierService:
             "summary": summary,
             "decision_levels": decision_levels,
             "scaled_vector": [float(round(v, 3)) for v in scaled_vector],
-            "is_high_confidence": bool(prob_phishing >= 0.90)
+            "is_high_confidence": bool(prob_phishing >= 0.75)
         }
 
 class Incident:
@@ -240,27 +240,14 @@ class Incident:
             "mitigation": self.mitigation
         }
 
-class SOCAnalystService:
+class AnalysisHistoryService:
     def __init__(self):
         self.incidents = []
 
     def add_incident(self, incident):
         self.incidents.insert(0, incident)
 
-    def get_pending_incidents(self):
-        return [inc.to_dict() for inc in self.incidents if inc.status in ["PENDING_SOC_REVIEW", "PENDING_ANALYSIS"]]
-
     def get_all_incidents(self):
         return [inc.to_dict() for inc in self.incidents]
 
-    def resolve_incident(self, incident_id, action, analyst_name="Analista SOC Tier 2"):
-        for inc in self.incidents:
-            if inc.id == incident_id:
-                if action == "CONFIRMED_THREAT":
-                    inc.update_status("RESOLVED_QUARANTINE", "ISOLATE_NETWORK_HOST", analyst_name)
-                    inc.alert_level = "CRITICO"
-                else:
-                    inc.update_status("RESOLVED_FALSE_POSITIVE", "RESTORE_MESSAGE_INBOX", analyst_name)
-                    inc.alert_level = "BAJO"
-                return inc.to_dict()
-        return None
+SOCAnalystService = AnalysisHistoryService

@@ -19,7 +19,7 @@
                 Inferencia en Tiempo Real
             </button>
             <button class="tab-btn" data-tab="tab-soc">
-                Consola de Triaje SOC <span class="badge-counter" id="badge-soc-count">0</span>
+                Historial de Análisis del Usuario <span class="badge-counter" id="badge-soc-count">0</span>
             </button>
             <button class="tab-btn" data-tab="tab-arquitectura">
                 Arquitectura y Documentación Técnica
@@ -148,30 +148,30 @@
         <section id="tab-soc" class="tab-panel">
             <div class="card">
                 <div class="card-title">
-                    <span>Consola de Triaje y Respuesta para Analistas SOC</span>
-                    <span class="badge-counter">Monitoreo de Amenazas</span>
+                    <span>Historial de Correos Analizados por el Usuario</span>
+                    <span class="badge-counter">Registro de Consultas</span>
                 </div>
 
                 <p style="font-size: 14px; color: #64748B; margin-bottom: 20px; line-height: 1.6;">
-                    Cola de incidentes derivados para analisis forense de segundo nivel. Casos con certeza intermedia o alertas reportadas por empleados en espera de confirmacion definitiva.
+                    Registro cronologico de correos evaluados mediante el motor de aprendizaje automatico. Proporciona trazabilidad inmediata del veredicto y las recomendaciones preventivas para el usuario sin intermediacion de terceros.
                 </p>
 
                 <div class="data-table-container">
                     <table class="custom-table">
                         <thead>
                             <tr>
-                                <th>ID Incidente</th>
+                                <th>ID Analisis</th>
                                 <th>Remitente Anonimizado</th>
                                 <th>Fecha y Hora</th>
                                 <th>Confianza IA</th>
                                 <th>Nivel Alerta</th>
-                                <th>Estado Operativo</th>
-                                <th>Acción Inmediata</th>
+                                <th>Veredicto</th>
+                                <th>Recomendacion al Usuario</th>
                             </tr>
                         </thead>
                         <tbody id="soc-incidents-tbody">
                             <tr>
-                                <td colspan="7" class="empty-state">Cargando incidentes del sistema...</td>
+                                <td colspan="7" class="empty-state">Cargando historial de analisis del sistema...</td>
                             </tr>
                         </tbody>
                     </table>

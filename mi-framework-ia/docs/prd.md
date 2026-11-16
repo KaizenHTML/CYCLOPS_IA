@@ -1,67 +1,63 @@
 # Product Requirements Document - CYCLOPS
 
-
-Este documento especifica la visión, el alcance, las reglas de negocio, los requerimientos funcionales y no funcionales, así como los casos de uso principales para la plataforma de ciberseguridad **CYCLOPS**.
+Este documento especifica la visión, el alcance, las reglas de negocio, los requerimientos funcionales y no funcionales, así como los casos de uso principales para la plataforma de ciberseguridad **CYCLOPS SENTINEL**, enfocada exclusivamente en el **Usuario Final**.
 
 ---
 
 ## 1. Visión y Alcance del Producto
 
 ### Visión
-Ofrecer una plataforma Enterprise B2B de detección de phishing y respuesta a incidentes que reduzca drásticamente los tiempos de exposición ante amenazas por correo electrónico, automatizando la mitigación de casos de alta certeza y optimizando la carga operativa del equipo SOC.
+Empoderar al usuario final mediante un asistente inteligente y autónomo de ciberseguridad capaz de detectar amenazas de phishing e ingeniería social en correos electrónicos en tiempo real, proporcionando diagnósticos precisos, explicables y recomendaciones inmediatas sin requerir la intervención de analistas externos.
 
 ### Alcance
-El sistema comprende la ingesta de correos sospechosos reportados por empleados, la extracción y limpieza de datos mediante NLP, la transformación de métricas cuantitativas con RobustScaler, la clasificación por modelo de Machine Learning en Scikit-Learn y la orquestación en FastAPI con base de datos PostgreSQL. La plataforma maneja una respuesta de dos niveles de confianza y expone una consola de triaje priorizada para el Analista SOC.
+El sistema comprende la ingesta directa de correos sospechosos ingresados por el usuario, la anonimización y limpieza de texto mediante procesamiento de lenguaje natural, la transformación estadística de métricas numéricas con RobustScaler, y la clasificación inmediata por modelos de Machine Learning. El usuario recibe un veredicto definitivo, un desglose de los factores de riesgo y un historial completo de sus consultas para proteger sus activos digitales.
 
 ---
 
 ## 2. Casos de Uso Principales
 
-### CU01: Reporte de Correo Sospechoso por Empleado
-* **Actor Principal:** Empleado - Usuario Final.
-* **Precondición:** El empleado recibe un correo sospechoso en su cliente de correo.
+### CU01: Análisis de Correo Sospechoso por Usuario Final
+* **Actor Principal:** Usuario Final.
+* **Precondición:** El usuario recibe un correo sospechoso y desea verificar su legitimidad.
 * **Flujo Principal:**
-  1. El empleado ingresa el texto o cuerpo del mensaje en la interfaz de usuario.
-  2. El sistema recibe el reporte, genera un identificador de incidente y responde de forma asíncrona en milisegundos.
-  3. El sistema notifica al usuario el resultado de la evaluación inmediata o el estado de revisión.
+  1. El usuario ingresa el texto del mensaje en la interfaz interactiva o utiliza plantillas de prueba.
+  2. El sistema recibe el texto, extrae las características y procesa la inferencia en milisegundos.
+  3. El sistema despliega el veredicto definitivo, el porcentaje de confianza, el nivel de riesgo y las recomendaciones preventivas.
 
-### CU02: Evaluación y Mitigación Automática por Agente de IA
-* **Actor Principal:** Agente de Inteligencia Artificial CYCLOPS.
-* **Precondición:** Incidente registrado en estado pendiente de análisis.
+### CU02: Inferencia Automatizada y Explicabilidad por Agente de IA
+* **Actor Principal:** Motor de Inteligencia Artificial CYCLOPS.
+* **Precondición:** Mensaje ingresado por el usuario en espera de evaluación.
 * **Flujo Principal:**
-  1. El agente invoca la skill de limpieza NLP para anonimizar texto y extraer métricas numéricas.
-  2. El agente invoca la skill de escalado para transformar variables numéricas con el modelo entrenado de RobustScaler.
-  3. El agente evalúa la probabilidad de amenaza devuelta por Scikit-Learn.
-  4. Si la confianza es mayor o igual al noventa por ciento, el sistema aplica cuarentena automática, marca el incidente como automitigado y notifica al empleado.
-  5. Si la confianza está entre cincuenta y ochenta y nueve por ciento, el sistema enruta el ticket a la consola del Analista SOC.
+  1. El motor ejecuta la limpieza léxica, enmascara identificadores personales e IPs, y cuantifica variables estructurales.
+  2. Transforma el vector numérico utilizando el artefacto preentrenado de RobustScaler para aislar valores atípicos.
+  3. Calcula la probabilidad matemática de amenaza mediante el clasificador de Scikit-Learn.
+  4. Genera el desglose explicativo en cuatro niveles: Ingesta NLP, Escalado Robusto, Inferencia Probabilística y Recomendación al Usuario.
 
-### CU03: Triaje Manual y Resolución por Analista SOC
-* **Actor Principal:** Analista de Seguridad SOC.
-* **Precondición:** Existencia de incidentes en estado de revisión manual por ambigüedad.
+### CU03: Consulta de Historial y Trazabilidad por Usuario
+* **Actor Principal:** Usuario Final.
+* **Precondición:** Existencia de análisis previos realizados en la sesión o registrados en el sistema.
 * **Flujo Principal:**
-  1. El analista visualiza la lista de alertas priorizadas en su consola React.
-  2. Inspecciona el resumen técnico, las métricas escaladas y la recomendación del modelo.
-  3. Selecciona la acción definitiva con un clic confirmando phishing o falsa alarma.
-  4. El sistema actualiza el registro en PostgreSQL y envía la notificación final al empleado reportante.
+  1. El usuario accede a la pestaña de Historial de Análisis.
+  2. Visualiza el registro cronológico con identificador de consulta, fecha, nivel de riesgo y recomendación asignada.
+  3. Revisa la trazabilidad de sus correos evaluados para mantener control preventivo de su bandeja de entrada.
 
 ---
 
 ## 3. Requerimientos Funcionales
 
-* **RF01 - Ingesta de Reportes:** La API debe permitir la recepción de solicitudes HTTP POST con el texto del correo y los datos del remitente.
-* **RF02 - Preprocesamiento NLP:** El backend debe limpiar el texto eliminando caracteres innecesarios y anonimizando direcciones IP.
-* **RF03 - Escalado Robusto:** Las métricas de conteo de caracteres, palabras y URLs deben ser transformadas utilizando el modelo preentrenado de RobustScaler para evitar distorsión por valores extremos.
-* **RF04 - Clasificación de Riesgo:** El sistema debe calcular la probabilidad probabilística de phishing utilizando un modelo supervisado de Scikit-Learn.
-* **RF05 - Motor de Decisión Híbrido:** El sistema debe bifurcar la respuesta operativamente: automatización inmediata si la confianza es igual o superior al noventa por ciento, y derivación a consola SOC para valores entre cincuenta y ochenta y nueve por ciento.
-* **RF06 - Persistencia Relacional:** PostgreSQL debe registrar el historial completo de cada incidente, sus metadatos extraídos, la evaluación del modelo y la acción de mitigación aplicada.
-* **RF07 - Consola de Triaje:** La interfaz debe proveer al analista SOC un panel para filtrar, ordenar y resolver incidentes pendientes.
+* **RF01 - Ingesta de Mensajes:** La API y la interfaz deben permitir la recepción de solicitudes HTTP POST con el contenido de correos sospechosos y el identificador del usuario.
+* **RF02 - Preprocesamiento NLP y Anonimización:** El sistema debe normalizar el texto y enmascarar automáticamente direcciones IP y direcciones de correo electrónico para proteger la privacidad.
+* **RF03 - Escalado Robusto:** Las variables numéricas de longitud, conteo de palabras, cantidad de hipervínculos y densidad de urgencia deben ser transformadas con RobustScaler para evitar distorsiones por valores extremos.
+* **RF04 - Clasificación Autónoma de Riesgo:** El motor debe determinar de forma directa y probabilística si el mensaje constituye una amenaza de Phishing o es Legítimo.
+* **RF05 - Explicabilidad y Recomendaciones Directas:** La interfaz debe presentar al usuario una justificación clara del diagnóstico, alertando sobre factores como inductores de urgencia coercitiva o enlaces no verificados, con directrices claras de actuación.
+* **RF06 - Historial de Consultas:** El sistema debe registrar cada análisis realizado y exponerlo en una vista accesible de historial para el usuario.
 
 ---
 
 ## 4. Requerimientos No Funcionales
 
-* **RNF01 - Rendimiento y Latencia:** La API de ingesta en FastAPI debe responder la confirmación de recepción en menos de doscientos milisegundos.
-* **RNF02 - Escalabilidad:** El backend debe utilizar procesamiento asíncrono para manejar ráfagas de reportes sin bloquear el hilo principal.
-* **RNF03 - Seguridad por Diseño:** No se deben almacenar datos sensibles sin anonimizar, y todas las conexiones a PostgreSQL deben manejar autenticación segura.
-* **RNF04 - Mantenibilidad y Clean Architecture:** El código debe estructurarse respetando la separación en capas, desacoplando la lógica de agente, skills, persistencia e interfaces.
-* **RNF05 - Disponibilidad de la Interfaz:** La consola en React con Tailwind CSS debe ser completamente adaptativa y responder a estándares de diseño oscuro optimizado para operaciones de SOC.
+* **RNF01 - Rendimiento y Latencia:** La inferencia completa debe retornar el diagnóstico al usuario en menos de doscientos milisegundos.
+* **RNF02 - Escalabilidad:** La arquitectura debe procesar consultas concurrentes sin degradar la precisión ni bloquear el hilo de ejecución principal.
+* **RNF03 - Seguridad y Privacidad por Diseño:** No se almacenan datos personales sin anonimización previa, garantizando estricta confidencialidad bajo estándares de protección de datos.
+* **RNF04 - Mantenibilidad y Clean Architecture:** El código debe estructurarse modularmente desacoplando el motor de extracción, el escalador, los clasificadores y la capa de presentación.
+* **RNF05 - Usabilidad y Experiencia de Usuario:** La interfaz gráfica interactiva debe ser intuitiva, moderna, adaptativa y con información clara orientada a la toma de decisiones del usuario sin tecnicismos innecesarios.

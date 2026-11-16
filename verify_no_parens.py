@@ -46,7 +46,8 @@ def check_file(filepath):
                 if "(" in s or ")" in s:
                     violations.append(f"{filepath}:{line_num} String literal contains paren: {s}")
 
-for root, dirs, files in os.walk("."):
+base_dir = os.path.dirname(os.path.abspath(__file__))
+for root, dirs, files in os.walk(base_dir):
     # skip .git or .gemini or brain
     if ".git" in root or ".gemini" in root or "__pycache__" in root:
         continue

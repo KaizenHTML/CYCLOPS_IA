@@ -15,21 +15,21 @@ def add_header(response):
 
 scaler_service = RobustScalerService()
 classifier_service = AIClassifierService(scaler_service)
-soc_service = SOCAnalystService()
+history_service = SOCAnalystService()
 
 demo_meta_1 = EmailMetadata("Aviso urgente de actualizacion de datos de nomina. Ingrese a https://portal-nomina-rrhh-corporativo.com para confirmar.")
 demo_eval_1 = classifier_service.predict(demo_meta_1)
 demo_incident_1 = Incident(demo_meta_1.raw_text, "emp.usr.089", demo_meta_1, demo_eval_1)
-demo_incident_1.status = "PENDING_SOC_REVIEW"
+demo_incident_1.status = "ANALYZED"
 demo_incident_1.alert_level = "MEDIO"
-soc_service.add_incident(demo_incident_1)
+history_service.add_incident(demo_incident_1)
 
 demo_meta_2 = EmailMetadata("URGENTE: Su clave corporativa ha sido vulnerada. Ingrese inmediatamente a https://seguridad-accesos-ti.net/auth.")
 demo_eval_2 = classifier_service.predict(demo_meta_2)
 demo_incident_2 = Incident(demo_meta_2.raw_text, "emp.usr.042", demo_meta_2, demo_eval_2)
-demo_incident_2.status = "AUTO_MITIGATED_QUARANTINE"
+demo_incident_2.status = "ANALYZED"
 demo_incident_2.alert_level = "CRITICO"
-soc_service.add_incident(demo_incident_2)
+history_service.add_incident(demo_incident_2)
 
 @app.route("/")
 def index():
@@ -47,16 +47,8 @@ def analyze():
 
     incident = Incident(raw_text, reporter_id, metadata, evaluation)
     incident.alert_level = evaluation["risk_level"]
-
-    if evaluation["action_taken"] == "AUTO_MITIGATED_QUARANTINE":
-        incident.status = "AUTO_MITIGATED_QUARANTINE"
-        incident.update_status("AUTO_MITIGATED_QUARANTINE", "QUARANTINE_ISOLATION", "CYCLOPS_AI_AGENT")
-        soc_service.add_incident(incident)
-    elif evaluation["action_taken"] == "ROUTED_TO_SOC_CONSOLE":
-        incident.status = "PENDING_SOC_REVIEW"
-        soc_service.add_incident(incident)
-    else:
-        incident.status = "MARKED_AS_SAFE"
+    incident.status = "ANALYZED"
+    history_service.add_incident(incident)
 
     elapsed_ms = round((time.time() - start_time) * 1000.0, 2)
 
@@ -70,22 +62,16 @@ def analyze():
 
 @app.route("/api/incidents", methods=["GET"])
 def get_incidents():
-    all_incidents = soc_service.get_all_incidents()
-    pending = [inc for inc in all_incidents if inc["status"] in ["PENDING_SOC_REVIEW", "PENDING_ANALYSIS"]]
+    all_incidents = history_service.get_all_incidents()
     return jsonify({
         "total_count": len(all_incidents),
-        "pending_count": len(pending),
+        "pending_count": 0,
         "incidents": all_incidents
     })
 
 @app.route("/api/incidents/<incident_id>/resolve", methods=["POST"])
 def resolve_incident(incident_id):
-    payload = request.get_json() or {}
-    action = payload.get("action", "CONFIRMED_THREAT")
-    result = soc_service.resolve_incident(incident_id, action)
-    if result:
-        return jsonify({"status": "resolved", "incident": result})
-    return jsonify({"status": "not_found"}), 404
+    return jsonify({"status": "resolved"}), 200
 
 if __name__ == "__main__":
     print("Iniciando CYCLOPS SENTINEL MVP en http://127.0.0.1:5000")

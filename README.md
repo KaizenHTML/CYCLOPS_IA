@@ -1,6 +1,7 @@
 # CYCLOPS SENTINEL
 
 Plataforma inteligente y autónoma para la detección proactiva de amenazas de phishing, análisis de correos sospechosos y protección en tiempo real para usuarios finales mediante Machine Learning.
+
 <br>
 ---
 <br>
@@ -12,6 +13,7 @@ Plataforma inteligente y autónoma para la detección proactiva de amenazas de p
 El sistema está concebido con un **enfoque cien por ciento centrado en el usuario final**. Permite que cualquier usuario ingrese o reporte un mensaje sospechoso en la interfaz web interactiva, activando un pipeline de inferencia en tiempo real que ejecuta limpieza de texto, anonimización de datos sensibles, extracción de métricas estructurales y acondicionamiento estadístico mediante **RobustScaler**. 
 
 A través de un modelo supervisado de aprendizaje automático de alta precisión y explicabilidad, el sistema genera de forma autónoma e instantánea un veredicto definitivo: **Phishing Confirmado**, **Phishing Sospechoso** o **Mensaje Legítimo**, indicando el nivel de riesgo, la probabilidad matemática y una serie de recomendaciones preventivas claras para salvaguardar la seguridad del usuario sin depender de intermediarios ni de analistas externos.
+
 <br>
 ---
 <br>

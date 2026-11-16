@@ -1,7 +1,7 @@
 # CYCLOPS SENTINEL
 
 Plataforma inteligente y autónoma para la detección proactiva de amenazas de phishing, análisis de correos sospechosos y protección en tiempo real para usuarios finales mediante Machine Learning.
-
+<br>
 ---
 <br>
 
@@ -12,14 +12,14 @@ Plataforma inteligente y autónoma para la detección proactiva de amenazas de p
 El sistema está concebido con un **enfoque cien por ciento centrado en el usuario final**. Permite que cualquier usuario ingrese o reporte un mensaje sospechoso en la interfaz web interactiva, activando un pipeline de inferencia en tiempo real que ejecuta limpieza de texto, anonimización de datos sensibles, extracción de métricas estructurales y acondicionamiento estadístico mediante **RobustScaler**. 
 
 A través de un modelo supervisado de aprendizaje automático de alta precisión y explicabilidad, el sistema genera de forma autónoma e instantánea un veredicto definitivo: **Phishing Confirmado**, **Phishing Sospechoso** o **Mensaje Legítimo**, indicando el nivel de riesgo, la probabilidad matemática y una serie de recomendaciones preventivas claras para salvaguardar la seguridad del usuario sin depender de intermediarios ni de analistas externos.
-
+<br>
 ---
 <br>
 
 ## Integrantes del Proyecto
 
 * **Cristian Díaz** - Ingeniero de Software e Investigador Principal
-
+<br>
 ---
 <br>
 
@@ -44,7 +44,7 @@ A través de un modelo supervisado de aprendizaje automático de alta precisión
 ### Almacenamiento, Persistencia y Auditoría
 * **Base de Datos Relacional:** PostgreSQL
 * **Capa de Abstracción de Datos:** SQLAlchemy para el registro del historial de consultas, trazabilidad de análisis y auditoría del sistema
-
+<br>
 ---
 <br>
 
@@ -66,7 +66,7 @@ Cuando un usuario consulta un correo sospechoso en la plataforma, el sistema eje
 * **Nivel 2 - Extracción de Métricas y Escalado Robusto:** Transformación del vector numérico empleando el artefacto preentrenado de RobustScaler para aislar valores atípicos.
 * **Nivel 3 - Inferencia Probabilística:** Evaluación matemática de patrones sospechosos mediante el modelo clasificador.
 * **Nivel 4 - Diagnóstico Directo y Recomendaciones:** Entrega del veredicto final categorizado por nivel de riesgo, junto con recomendaciones preventivas inmediatas para el usuario.
-
+<br>
 ---
 <br>
 
@@ -86,7 +86,7 @@ Toda la definición arquitectónica, estratégica y normativa del proyecto se en
   * Directrices de gobernanza técnica y reglas operativas del framework.
 * **Diagramas Técnicos en PDF:** [Explorar Carpeta de Assets](mi-framework-ia/docs/assets/)
   * Diagrama de clases, diagrama de componentes, modelo entidad-relación e historias de usuario.
-
+<br>
 ---
 <br>
 
@@ -130,7 +130,7 @@ frameworkIa/
         ├── prompts.md                       # Prompts de contexto para los agentes
         └── assets/                          # Diagramas técnicos en formato PDF
 ```
-
+<br>
 ---
 <br>
 
@@ -167,7 +167,7 @@ Para ejecutar la plataforma localmente y realizar pruebas interactivas de detecc
    ```
    http://127.0.0.1:5000
    ```
-
+<br>
 ---
 <br>
 
